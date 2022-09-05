@@ -181,6 +181,7 @@ def print_traffic_statistics(device_ip, token, connection_status):
 def print_connection_status(device_ip, token):
     d = call_api(device_ip, token, '/api/monitoring/status')
     connection_status = d['response']['ConnectionStatus']
+    connection_status = d['response']['ConnectionStatus']
     signal_strength = d['response']['SignalStrength']
     signal_level = d['response']['SignalIcon']
     network_type = d['response']['CurrentNetworkType']
@@ -252,6 +253,18 @@ def print_unread(device_ip, token):
     if unread_messages is not None and int(unread_messages) > 0:
         print('  Unread SMS: ' + unread_messages)
 
+def print_signal(device_ip, token):
+    d = call_api(device_ip, token, '/api/device/signal')
+    rssi = d['response']['rssi']
+    rsrq = d['response']['rsrq']
+    rsrp = d['response']['rsrp']
+    sinr = d['response']['sinr']
+    
+    print('  RSSI: ' + rssi)
+    print('    RSRQ: ' + rsrq)
+    print('    RSRP: ' + rsrp)
+    print('    SINR: ' + sinr)
+
 device_ip = '192.168.1.1'
 if len(sys.argv) == 2:
     device_ip = sys.argv[1]
@@ -274,4 +287,5 @@ connection_status = print_connection_status(device_ip, token)
 print_provider(device_ip, token, connection_status)
 print_traffic_statistics(device_ip, token, connection_status)
 print_unread(device_ip, token)
+print_signal(device_ip, token)
 print('')
